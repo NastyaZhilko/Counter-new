@@ -2,37 +2,47 @@ import React, {useState} from 'react';
 import s from './App.module.css';
 import {ButtonComp} from "./Components/Button";
 import {InputComp} from "./Components/Input";
-import {InputSettingComp} from "./Components/InputSetting";
+import {InputMinComp, InputMaxComp} from "./Components/InputSetting";
 
+
+type CounterType = {
+    id: number
+    minValue: number
+    maxValue: number
+}
 
 function App() {
+
+    const [counter, setCounter] = useState<CounterType>({id: 1, minValue: 0, maxValue: 5})//создала объект коунтер
+
     const [value, setValue] = useState<number>(0)
-    const minValue: number = 0;
-    const maxValue: number = 5;
+    let minValue: number = counter.minValue; //инициализационное значение приравниваю значению в объекте
+    let maxValue: number = counter.maxValue; //инициализационное значение приравниваю значению в объекте
 
-    const [newMaxValue, setNewMaxValue]=useState<number>(maxValue)
-   //const newMaxValueMax: number > newMinValue;
-
-    const [newMinValue, setNewMinValue]=useState<number>(minValue)
-    const newMinValueMin: number = 0;
-
-
+    const changeInValueMin = (newValue: number) => {
+        counter.minValue = newValue
+        setCounter({...counter})
+    }//меняем стартовое значение
+    const changeInValueMax = (newValue: number) => {
+        counter.maxValue = newValue
+        setCounter({...counter})
+    }//меняем максимальное значение
     const incButton = () => {
         if (minValue <= value && value < maxValue) {
             setValue(value + 1)
         }
-    }
+    }//увеличиваем значение на 1 при нажание ни кнопку "inc"
+
     const resetButton = () => {
         setValue(minValue)
-    }
+    }//возвращаем стартовое значение при нажатии на кнопку "reset"
     const setButton = () => {
-        setValue(minValue)
-    }
+        setValue(counter.minValue)
+    }//отправляем новое стартовое значение в соунтер
 
-
-    const disabledIncButton = (value: number) => !!(value === maxValue)
-    const disabledResetButton = (value: number) => !!(value === 0)
-    const disabledSetButton = (value: number) => !!(value < 0)
+    const disabledIncButton = (value: number) => !!(value === maxValue) //дизэйблим кнопку "inc" при достижении макс.значения
+    const disabledResetButton = (value: number) => !!(value === minValue)//дизэйблим кнопку "reset" при минимальном значении в инпуте
+    const disabledSetButton = (value: number) => !!(value < 0 && maxValue === minValue) //дизэйблим кнопку "set" при минимальном значении в инпуте
 
     return (
         <div className={s.App}>
@@ -43,7 +53,6 @@ function App() {
                         value={value}
                         maxValue={maxValue}
                     />
-
                     <div className={s.Button}>
                         <ButtonComp
                             clickOnButton={incButton}
@@ -52,7 +61,6 @@ function App() {
                             disabledButton={disabledIncButton}
                         />
                         <ButtonComp
-
                             clickOnButton={resetButton}
                             title={'reset'}
                             value={value}
@@ -61,16 +69,21 @@ function App() {
                     </div>
                 </div>
             </div>
+
+
             <div>
                 <h1>Settings</h1>
                 <div className={s.body}>
-                    <InputSettingComp
-                        value={newMaxValue}
+                    <InputMaxComp
+                        value={counter.maxValue}
                         title={'max value: '}
+                        changeInValueMax={changeInValueMax}
                     />
-                    <InputSettingComp
-                        value={newMinValue}
-                        title={'min value: '}
+                    <InputMinComp
+                        value={counter.minValue}
+                        title={'start value: '}
+                        changeInValueMin={changeInValueMin}
+
                     />
 
                     <div className={s.Button}>
@@ -86,7 +99,7 @@ function App() {
             </div>
         </div>
     );
-
 }
+
 
 export default App;
