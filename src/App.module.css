@@ -17,9 +17,12 @@ button {
 }
 
 .App {
-  text-align: center;
-  background: #282c34;
+ text-align: center;
   color: cadetblue;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
 }
 
 .Button {
@@ -34,9 +37,10 @@ button {
 
 .body {
   border: 3px solid cadetblue;
-  padding: 50px 30px;
+  padding: 70px 30px;
   border-radius: 10px;
-  width: 300px;
+  width: 500px;
   height: 70px;
-  margin: 10px auto;
+  margin: 30px auto;
+  paddint: 20px
 }

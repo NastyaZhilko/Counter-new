@@ -4,8 +4,9 @@ import s from './InputSetting.module.css';
 
 export type InputSettingsType = {
     title: string
-    value: number
+    value: number|string
     changeValue:(value: number) => void
+
 }
 
 
@@ -16,7 +17,7 @@ export const InputSettings = (props: InputSettingsType) => {
     return (
         <div className={s.block}>
             <span>{props.title}</span>
-             <input className={(props.value < 0) ? s.disabled : s.active}
+             <input className={(props.value < 0 ) ? s.disabled : s.active}
                    onChange={onChangeValue}
                    value={props.value}
                    type={'number'}/>

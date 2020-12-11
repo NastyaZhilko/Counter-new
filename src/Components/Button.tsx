@@ -5,11 +5,11 @@ export type ButtonCompType = {
     title: string
     disabledButton: boolean
 }
-export const ButtonComp = ({clickOnButton,disabledButton,title}: ButtonCompType) => {
+export const ButtonComp = (props:ButtonCompType) => {
     return (
 
         <div className={s.button}>
-        <button onClick={clickOnButton} disabled={disabledButton}>{title}</button>
+        <button onClick={props.clickOnButton} disabled={props.disabledButton}>{props.title}</button>
         </div>
 )
 }

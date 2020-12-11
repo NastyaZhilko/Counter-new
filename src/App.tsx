@@ -3,37 +3,45 @@ import s from './App.module.css';
 import {ButtonComp} from "./Components/Button";
 import {InputComp} from "./Components/Input";
 import {InputSettings} from "./Components/InputSetting";
+import {restoreState, saveValue} from "./LocalStorage/LocalStarage";
 
 function App() {
+    const errorMes: string = 'Incorrect value'
+    const setMess: string = "enter values and press 'set'"
 
-    const [counter, setCounter] = useState<number | string>(0)//создала объект коунтер
-    const [startValue, setStartValue] = useState<number>(0)//
-    const [maxValue, setMaxValue] = useState<number>(5)//
-    const [disabledSet, setDisableSet] = useState<boolean>(true)
-    const [disabledInc, setDisableInc] = useState<boolean>(false)
-    const [disabledReset, setDisableReset] = useState<boolean>(false)
+    const [counter, setCounter] = useState<number>(restoreState().start)//значение счетчика(инит. значение = startValue сохраненноев localStorage)
+    const [startValue, setStartValue] = useState<number>(restoreState().start)//стартовое значение в блоке настроек
+    const [maxValue, setMaxValue] = useState<number>(restoreState().max)//максимальное значение в блоке настроек
+    const [disabledSet, setDisableSet] = useState<boolean>(true)//булево значение определяет активность кнопки Set
+    const [disabledInc, setDisableInc] = useState<boolean>(false)//булево значение определяет активность кнопки Inc
+    const [disabledReset, setDisableReset] = useState<boolean>(true)//булево значение определяет активность кнопки Reset
+    const [error, setError] = useState<string>('')//
 
-    const error = (maxValue: number, startValue: number) => {
-        if (maxValue < 0 || startValue<0 || maxValue===startValue) {
-            setCounter('Incorrect value')
-        } else {setCounter("enter values and press 'set'")}
-    }
-
-    const changeStartValue = (value: number) => {
-        error(maxValue, startValue)
-        setStartValue(value)
+    const changeStartValue = (startValue: number) => {
+        if (maxValue <= startValue || startValue < 0) {
+            setError(errorMes)
+            setDisableSet(true)
+        } else {
+            setError(setMess)
+            setDisableSet(false)
+        }
+        setStartValue(startValue)
         setDisableReset(true)
         setDisableInc(true)
-        setDisableSet(false)
 
     }//меняем стартовое значение
-    const changeMaxValue = (value: number) => {
-        error(maxValue, startValue)
-        setMaxValue(value)
+    const changeMaxValue = (maxValue: number) => {
+        if (maxValue <= startValue || startValue < 0) {
+            setError(errorMes)
+            setDisableSet(true)
+        } else {
+            setError(setMess)
+            setDisableSet(false)
+        }
+        setMaxValue(maxValue)
         setDisableReset(true)
         setDisableInc(true)
-        setDisableSet(false)
-       // setCounter("enter values and press 'set'")
+
     }//меняем максимальное значение
     const incButton = () => {
         if (counter < maxValue) {
@@ -45,30 +53,19 @@ function App() {
         }
     }  //увеличиваем значение на 1 при нажание ни кнопку "inc"
 
-
     const resetButton = () => {
         setCounter(startValue)
         setDisableReset(true)
         setDisableInc(false)
     }//возвращаем стартовое значение при нажатии на кнопку "reset"
 
-
     const setButton = () => {
         setCounter(startValue)
+        saveValue(maxValue, startValue)
         setDisableSet(true)
         setDisableReset(true)
         setDisableInc(false)
     }//отправляем новое стартовое значение в коунтер
-    /* const disabledSetButton = () => {
-        setDisableSet(true)
-     }*///дизэйблим кнопку "set" при минимальном значении в инпуте
-
-
-    //const disabledIncButton = () => (value: number) => (value === maxValue)//дизэйблим кнопку "inc" при достижении макс.значения
-    //const disabledResetButton = () => (value: number) => !!(value === minValue)//дизэйблим кнопку "reset" при минимальном значении в инпуте
-    //const disabledSetButton = () => !(
-    //maxValue !== minValue && maxValue > minValue && minValue > 0)
-    //дизэйблим кнопку "set" при минимальном значении в инпуте
 
     return (
         <div className={s.App}>
@@ -78,6 +75,7 @@ function App() {
                     <InputComp
                         value={counter}
                         maxValue={maxValue}
+                        error={error}
                     />
                     <div className={s.Button}>
                         <ButtonComp
@@ -98,12 +96,13 @@ function App() {
                 <div className={s.body}>
                     <InputSettings
                         value={maxValue}
-                        title={'max value: '}
+                        title={'max value:'}
                         changeValue={changeMaxValue}
+
                     />
                     <InputSettings
                         value={startValue}
-                        title={'start value: '}
+                        title={'start value:'}
                         changeValue={changeStartValue}
                     />
                     <div className={s.Button}>
@@ -112,14 +111,12 @@ function App() {
                             title={'set'}
                             disabledButton={disabledSet}
                         />
-
                     </div>
                 </div>
             </div>
         </div>
     );
 }
-
 
 export default App;
 
