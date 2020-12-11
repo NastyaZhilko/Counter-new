@@ -1,16 +1,15 @@
 import React from 'react';
 import s from './Button.module.css';
 export type ButtonCompType = {
-    title: string
     clickOnButton: () => void
-    value: number
-    disabledButton: (value:number)=>boolean
+    title: string
+    disabledButton: boolean
 }
-export const ButtonComp = (props: ButtonCompType) => {
+export const ButtonComp = ({clickOnButton,disabledButton,title}: ButtonCompType) => {
     return (
 
         <div className={s.button}>
-        <button onClick={props.clickOnButton} disabled={props.disabledButton(props.value)}>{props.title}</button>
+        <button onClick={clickOnButton} disabled={disabledButton}>{title}</button>
         </div>
 )
 }

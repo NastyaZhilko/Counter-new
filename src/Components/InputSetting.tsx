@@ -1,46 +1,25 @@
 import React, {ChangeEvent, useState} from 'react';
 import s from './InputSetting.module.css';
-import {EditableSpan} from "./EditableSpan";
 
-export type InputMinCompType = {
+
+export type InputSettingsType = {
     title: string
-    value: number
-    changeInValueMin: (newValueMin: number) => void
-}
-export type InputMaxCompType = {
-    value: number
-    title: string
-    changeInValueMax:(newValueMax: number) => void
+    initValue: number
+    changeInValue:(value: number) => void
 }
 
-export const InputMinComp = (props: InputMinCompType) => {
-    const onChangeHandlerMin = (newValue: number) => {
-        props.changeInValueMin(newValue)
+
+export const InputSettings = (props: InputSettingsType) => {
+    const onChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
+        props.changeInValue(Number(e.currentTarget.value))
     }
-
     return (
         <div className={s.block}>
             <span>{props.title}</span>
-           {/* <input className={(props.value < 0) ? s.disabled : s.active}
-                   value={props.value}
-                //onChange={onChangeHandler} type={'number'}
-            />*/}
-            <EditableSpan  value={props.value} onChange={onChangeHandlerMin}/>
-        </div>
-    )
-}
-export const InputMaxComp = (props: InputMaxCompType) => {
-    const onChangeHandlerMax = (newValue:number) => {
-        props.changeInValueMax(newValue)
-    }
-return (
-        <div className={s.block}>
-            <span>{props.title}</span>
-           {/* <input className={(props.value < 0) ? s.disabled : s.active}
-                   //onChange={changeValue}
-                   value={props.value}
-                   type={'number'}*/}
-            <EditableSpan value={props.value} onChange={onChangeHandlerMax}/>
+             <input className={(props.initValue < 0) ? s.disabled : s.active}
+                   onChange={onChangeValue}
+                   value={props.initValue}
+                   type={'number'}/>
         </div>
     )
 }

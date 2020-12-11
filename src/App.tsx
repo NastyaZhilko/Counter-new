@@ -2,47 +2,66 @@ import React, {useState} from 'react';
 import s from './App.module.css';
 import {ButtonComp} from "./Components/Button";
 import {InputComp} from "./Components/Input";
-import {InputMinComp, InputMaxComp} from "./Components/InputSetting";
-
-
-type CounterType = {
-    id: number
-    minValue: number
-    maxValue: number
-}
+import {InputSettings} from "./Components/InputSetting";
 
 function App() {
 
-    const [counter, setCounter] = useState<CounterType>({id: 1, minValue: 0, maxValue: 5})//создала объект коунтер
+    const [counter, setCounter] = useState<number>(0)//создала объект коунтер
+    const [startValue, setStartValue] = useState<number>(0)//создала объект коунтер
+    const [maxValue, setMaxValue] = useState<number>(5)//создала объект коунтер
+    const [disabledSet, setDisableSet] = useState<boolean>(true)
+    const [disabledInc, setDisableInc] = useState<boolean>(false)
+    const [disabledReset, setDisableReset] = useState<boolean>(false)
 
-    const [value, setValue] = useState<number>(0)
-    let minValue: number = counter.minValue; //инициализационное значение приравниваю значению в объекте
-    let maxValue: number = counter.maxValue; //инициализационное значение приравниваю значению в объекте
 
-    const changeInValueMin = (newValue: number) => {
-        counter.minValue = newValue
-        setCounter({...counter})
+    const changeStartValue = (newValue: number) => {
+
+            setStartValue(newValue)
+            setDisableReset(true)
+            setDisableInc(true)
+            setDisableSet(false)
+
     }//меняем стартовое значение
-    const changeInValueMax = (newValue: number) => {
-        counter.maxValue = newValue
-        setCounter({...counter})
+    const changeMaxValue = (newValue: number) => {
+        setMaxValue(newValue)
+        setDisableReset(true)
+        setDisableInc(true)
+        setDisableSet(false)
     }//меняем максимальное значение
     const incButton = () => {
-        if (minValue <= value && value < maxValue) {
-            setValue(value + 1)
+        if (counter < maxValue) {
+            setCounter(counter + 1)
+            setDisableReset(false)
+        } else if (counter === maxValue) {
+            setDisableInc(true)
+
         }
-    }//увеличиваем значение на 1 при нажание ни кнопку "inc"
+    }  //увеличиваем значение на 1 при нажание ни кнопку "inc"
+
 
     const resetButton = () => {
-        setValue(minValue)
+        setCounter(startValue)
+        setDisableReset(true)
+        setDisableInc(false)
     }//возвращаем стартовое значение при нажатии на кнопку "reset"
-    const setButton = () => {
-        setValue(counter.minValue)
-    }//отправляем новое стартовое значение в соунтер
 
-    const disabledIncButton = (value: number) => !!(value === maxValue) //дизэйблим кнопку "inc" при достижении макс.значения
-    const disabledResetButton = (value: number) => !!(value === minValue)//дизэйблим кнопку "reset" при минимальном значении в инпуте
-    const disabledSetButton = (value: number) => !!(value < 0 && maxValue === minValue) //дизэйблим кнопку "set" при минимальном значении в инпуте
+
+    const setButton = () => {
+        setCounter(startValue)
+        setDisableSet(true)
+        setDisableReset(false)
+        setDisableInc(false)
+    }//отправляем новое стартовое значение в коунтер
+    /* const disabledSetButton = () => {
+        setDisableSet(true)
+     }*///дизэйблим кнопку "set" при минимальном значении в инпуте
+
+
+    //const disabledIncButton = () => (value: number) => (value === maxValue)//дизэйблим кнопку "inc" при достижении макс.значения
+    //const disabledResetButton = () => (value: number) => !!(value === minValue)//дизэйблим кнопку "reset" при минимальном значении в инпуте
+    //const disabledSetButton = () => !(
+    //maxValue !== minValue && maxValue > minValue && minValue > 0)
+    //дизэйблим кнопку "set" при минимальном значении в инпуте
 
     return (
         <div className={s.App}>
@@ -50,21 +69,20 @@ function App() {
                 <h1>Counter</h1>
                 <div className={s.body}>
                     <InputComp
-                        value={value}
+                        value={counter}
                         maxValue={maxValue}
+
                     />
                     <div className={s.Button}>
                         <ButtonComp
                             clickOnButton={incButton}
                             title={'inc'}
-                            value={value}
-                            disabledButton={disabledIncButton}
+                            disabledButton={disabledInc}
                         />
                         <ButtonComp
                             clickOnButton={resetButton}
                             title={'reset'}
-                            value={value}
-                            disabledButton={disabledResetButton}
+                            disabledButton={disabledReset}
                         />
                     </div>
                 </div>
@@ -74,15 +92,15 @@ function App() {
             <div>
                 <h1>Settings</h1>
                 <div className={s.body}>
-                    <InputMaxComp
-                        value={counter.maxValue}
+                    <InputSettings
+                        initValue={maxValue}
                         title={'max value: '}
-                        changeInValueMax={changeInValueMax}
+                        changeInValue={changeMaxValue}
                     />
-                    <InputMinComp
-                        value={counter.minValue}
+                    <InputSettings
+                        initValue={startValue}
                         title={'start value: '}
-                        changeInValueMin={changeInValueMin}
+                        changeInValue={changeStartValue}
 
                     />
 
@@ -90,8 +108,7 @@ function App() {
                         <ButtonComp
                             clickOnButton={setButton}
                             title={'set'}
-                            value={value}
-                            disabledButton={disabledSetButton}
+                            disabledButton={disabledSet}
                         />
 
                     </div>
@@ -103,3 +120,4 @@ function App() {
 
 
 export default App;
+
