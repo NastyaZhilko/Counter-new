@@ -6,31 +6,38 @@ import {InputSettings} from "./Components/InputSetting";
 
 function App() {
 
-    const [counter, setCounter] = useState<number>(0)//создала объект коунтер
-    const [startValue, setStartValue] = useState<number>(0)//создала объект коунтер
-    const [maxValue, setMaxValue] = useState<number>(5)//создала объект коунтер
+    const [counter, setCounter] = useState<number | string>(0)//создала объект коунтер
+    const [startValue, setStartValue] = useState<number>(0)//
+    const [maxValue, setMaxValue] = useState<number>(5)//
     const [disabledSet, setDisableSet] = useState<boolean>(true)
     const [disabledInc, setDisableInc] = useState<boolean>(false)
     const [disabledReset, setDisableReset] = useState<boolean>(false)
 
+    const error = (maxValue: number, startValue: number) => {
+        if (maxValue < 0 || startValue<0 || maxValue===startValue) {
+            setCounter('Incorrect value')
+        } else {setCounter("enter values and press 'set'")}
+    }
 
-    const changeStartValue = (newValue: number) => {
-
-            setStartValue(newValue)
-            setDisableReset(true)
-            setDisableInc(true)
-            setDisableSet(false)
-
-    }//меняем стартовое значение
-    const changeMaxValue = (newValue: number) => {
-        setMaxValue(newValue)
+    const changeStartValue = (value: number) => {
+        error(maxValue, startValue)
+        setStartValue(value)
         setDisableReset(true)
         setDisableInc(true)
         setDisableSet(false)
+
+    }//меняем стартовое значение
+    const changeMaxValue = (value: number) => {
+        error(maxValue, startValue)
+        setMaxValue(value)
+        setDisableReset(true)
+        setDisableInc(true)
+        setDisableSet(false)
+       // setCounter("enter values and press 'set'")
     }//меняем максимальное значение
     const incButton = () => {
         if (counter < maxValue) {
-            setCounter(counter + 1)
+            setCounter(Number(counter) + 1)
             setDisableReset(false)
         } else if (counter === maxValue) {
             setDisableInc(true)
@@ -49,7 +56,7 @@ function App() {
     const setButton = () => {
         setCounter(startValue)
         setDisableSet(true)
-        setDisableReset(false)
+        setDisableReset(true)
         setDisableInc(false)
     }//отправляем новое стартовое значение в коунтер
     /* const disabledSetButton = () => {
@@ -71,7 +78,6 @@ function App() {
                     <InputComp
                         value={counter}
                         maxValue={maxValue}
-
                     />
                     <div className={s.Button}>
                         <ButtonComp
@@ -87,23 +93,19 @@ function App() {
                     </div>
                 </div>
             </div>
-
-
             <div>
                 <h1>Settings</h1>
                 <div className={s.body}>
                     <InputSettings
-                        initValue={maxValue}
+                        value={maxValue}
                         title={'max value: '}
-                        changeInValue={changeMaxValue}
+                        changeValue={changeMaxValue}
                     />
                     <InputSettings
-                        initValue={startValue}
+                        value={startValue}
                         title={'start value: '}
-                        changeInValue={changeStartValue}
-
+                        changeValue={changeStartValue}
                     />
-
                     <div className={s.Button}>
                         <ButtonComp
                             clickOnButton={setButton}

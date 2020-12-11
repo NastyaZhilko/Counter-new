@@ -2,7 +2,7 @@
 import React from 'react';
 import s from './Input.module.css';
 export type InputCompType = {
-    value: number
+    value: number|string
     maxValue: number
 
 }
