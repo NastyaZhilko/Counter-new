@@ -17,7 +17,8 @@ function App() {
     const [disabledReset, setDisableReset] = useState<boolean>(true)//булево значение определяет активность кнопки Reset
     const [error, setError] = useState<string>('')//
 
-    const changeStartValue = (startValue: number) => {
+
+    const forError =(startValue: number, maxValue: number)=> {
         if (maxValue <= startValue || startValue < 0) {
             setError(errorMes)
             setDisableSet(true)
@@ -25,19 +26,17 @@ function App() {
             setError(setMess)
             setDisableSet(false)
         }
+    }
+
+    const changeStartValue = (startValue: number) => {
+        forError(startValue,maxValue)
         setStartValue(startValue)
         setDisableReset(true)
         setDisableInc(true)
 
     }//меняем стартовое значение
     const changeMaxValue = (maxValue: number) => {
-        if (maxValue <= startValue || startValue < 0) {
-            setError(errorMes)
-            setDisableSet(true)
-        } else {
-            setError(setMess)
-            setDisableSet(false)
-        }
+        forError(startValue,maxValue)
         setMaxValue(maxValue)
         setDisableReset(true)
         setDisableInc(true)
@@ -49,7 +48,6 @@ function App() {
             setDisableReset(false)
         } else if (counter === maxValue) {
             setDisableInc(true)
-
         }
     }  //увеличиваем значение на 1 при нажание ни кнопку "inc"
 
@@ -60,6 +58,7 @@ function App() {
     }//возвращаем стартовое значение при нажатии на кнопку "reset"
 
     const setButton = () => {
+        setError('')
         setCounter(startValue)
         saveValue(maxValue, startValue)
         setDisableSet(true)
@@ -69,6 +68,28 @@ function App() {
 
     return (
         <div className={s.App}>
+            <div>
+                <h1>Settings</h1>
+                <div className={s.body}>
+                    <InputSettings
+                        value={maxValue}
+                        title={'max value:'}
+                        changeValue={changeMaxValue}
+                    />
+                    <InputSettings
+                        value={startValue}
+                        title={'start value:'}
+                        changeValue={changeStartValue}
+                    />
+                    <div className={s.Button}>
+                        <ButtonComp
+                            clickOnButton={setButton}
+                            title={'set'}
+                            disabledButton={disabledSet}
+                        />
+                    </div>
+                </div>
+            </div>
             <div>
                 <h1>Counter</h1>
                 <div className={s.body}>
@@ -91,29 +112,7 @@ function App() {
                     </div>
                 </div>
             </div>
-            <div>
-                <h1>Settings</h1>
-                <div className={s.body}>
-                    <InputSettings
-                        value={maxValue}
-                        title={'max value:'}
-                        changeValue={changeMaxValue}
 
-                    />
-                    <InputSettings
-                        value={startValue}
-                        title={'start value:'}
-                        changeValue={changeStartValue}
-                    />
-                    <div className={s.Button}>
-                        <ButtonComp
-                            clickOnButton={setButton}
-                            title={'set'}
-                            disabledButton={disabledSet}
-                        />
-                    </div>
-                </div>
-            </div>
         </div>
     );
 }
