@@ -15,9 +15,9 @@ export const InputSettings = (props: InputSettingsType) => {
         props.changeValue(Number(e.currentTarget.value))
     }
     return (
-        <div className={s.block}>
+        <div className={s.input}>
             <span>{props.title}</span>
-            <input className={(props.value < 0 || props.error) ? s.disabled : s.active}
+            <input className={(props.value < 0 || props.error) ? s.errorStyle : s.correctlyStyle}
                    onChange={onChangeValue}
                    value={props.value}
                    type={'number'}/>
