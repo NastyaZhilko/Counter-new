@@ -11,14 +11,14 @@ export type InputSettingsType = {
 
 
 export const InputSettings = (props: InputSettingsType) => {
-    const onChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
+    const changeValue = (e: ChangeEvent<HTMLInputElement>) => {
         props.changeValue(Number(e.currentTarget.value))
     }
     return (
         <div className={s.input}>
             <span>{props.title}</span>
             <input className={(props.value < 0 || props.error) ? s.errorStyle : s.correctlyStyle}
-                   onChange={onChangeValue}
+                   onChange={changeValue}
                    value={props.value}
                    type={'number'}/>
         </div>
