@@ -5,9 +5,11 @@ import {InputComp} from "./Components/Input";
 import {InputSettings} from "./Components/InputSetting";
 import {restoreState, saveValue} from "./LocalStorage/LocalStarage";
 
+
+const errorMes: string = 'Incorrect value'
+const setMess: string = "enter values and press 'set'"
+
 function App() {
-    const errorMes: string = 'Incorrect value'
-    const setMess: string = "enter values and press 'set'"
 
     const [counter, setCounter] = useState<number>(restoreState().start)//значение счетчика(инит. значение = startValue сохраненноев localStorage)
     const [startValue, setStartValue] = useState<number>(restoreState().start)//стартовое значение в блоке настроек
@@ -75,11 +77,13 @@ function App() {
                         value={maxValue}
                         title={'max value:'}
                         changeValue={changeMaxValue}
+                        error={maxValue<=startValue}
                     />
                     <InputSettings
                         value={startValue}
                         title={'start value:'}
                         changeValue={changeStartValue}
+                        error={startValue>=maxValue}
                     />
                     <div className={s.Button}>
                         <ButtonComp
