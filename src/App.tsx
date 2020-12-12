@@ -5,7 +5,6 @@ import {InputComp} from "./Components/Input";
 import {InputSettings} from "./Components/InputSetting";
 import {restoreState, saveValue} from "./LocalStorage/LocalStarage";
 
-
 const errorMes: string = 'Incorrect value'
 const setMess: string = "enter values and press 'set'"
 
@@ -19,8 +18,7 @@ function App() {
     const [disabledReset, setDisableReset] = useState<boolean>(true)//булево значение определяет активность кнопки Reset
     const [error, setError] = useState<string>('')//
 
-
-    const forError =(startValue: number, maxValue: number)=> {
+    const forError = (startValue: number, maxValue: number) => {
         if (maxValue <= startValue || startValue < 0) {
             setError(errorMes)
             setDisableSet(true)
@@ -31,14 +29,14 @@ function App() {
     }
 
     const changeStartValue = (startValue: number) => {
-        forError(startValue,maxValue)
+        forError(startValue, maxValue)
         setStartValue(startValue)
         setDisableReset(true)
         setDisableInc(true)
 
     }//меняем стартовое значение
     const changeMaxValue = (maxValue: number) => {
-        forError(startValue,maxValue)
+        forError(startValue, maxValue)
         setMaxValue(maxValue)
         setDisableReset(true)
         setDisableInc(true)
@@ -77,13 +75,13 @@ function App() {
                         value={maxValue}
                         title={'max value:'}
                         changeValue={changeMaxValue}
-                        error={maxValue<=startValue}
+                        error={maxValue <= startValue}
                     />
                     <InputSettings
                         value={startValue}
                         title={'start value:'}
                         changeValue={changeStartValue}
-                        error={startValue>=maxValue}
+                        error={startValue >= maxValue}
                     />
                     <div className={s.Button}>
                         <ButtonComp
